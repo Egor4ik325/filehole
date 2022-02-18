@@ -10,6 +10,11 @@ Be able to upload and download files!
 - React SPA
 - CSS styling (single page)
 
+Django without:
+
+- authentication
+- admin
+
 ## API
 
 - `/api/`
@@ -18,3 +23,11 @@ Be able to upload and download files!
 
 In development sqlite3 will be used (to avoid settings up container environment)
 but in production - PostgreSQL.
+
+## Checklist
+
+- [ ] Setup django/react
+
+- [ ] Work on design
+
+- [ ] File model

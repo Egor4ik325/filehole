@@ -1,1 +1,9 @@
+__pycache__
+
 .venv
+node_modules
+
+.env.dev
+.env.prod
+
+db.sqlite3
