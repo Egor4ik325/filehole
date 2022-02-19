@@ -41,8 +41,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Apps
 DJANGO_APPS = [
-    # "django.contrib.auth",
-    # "django.contrib.contenttypes",
+    "django.contrib.auth",  # required by django rest framework
+    "django.contrib.contenttypes",  # required by django rest framework
     # "django.contrib.sessions",
     "django.contrib.sites",
     # "django.contrib.messages",
@@ -50,7 +50,9 @@ DJANGO_APPS = [
     # "django.contrib.admin",
 ]
 THIRD_PARTY_APPS = []
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "apps.files",
+]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # AUTHENTICATION

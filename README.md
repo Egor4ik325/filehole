@@ -1,5 +1,20 @@
 # Filehole
 
+The sense of this project is that it will be REALLy useful to me. I will
+self-host it on my own LAN and will be later improving.
+
+The UI will be similar to the OS desktop where files are located, movable and
+removable.
+
+File information may include:
+
+- ID
+- filename
+- filetype/extension
+- filepath
+- file size
+- upload time
+
 ## Goal
 
 Be able to upload and download files!
@@ -14,6 +29,7 @@ Django without:
 
 - authentication
 - admin
+- session, CSRF
 
 ## API
 
