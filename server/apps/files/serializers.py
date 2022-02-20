@@ -6,11 +6,9 @@ from .models import File
 class FileSerializer(serializers.ModelSerializer):
     """Serializer and deserializer for file model."""
 
-    url = serializers.ReadOnlyField(source="file")
+    url = serializers.FileField(source="file", use_url=True, read_only=True)
 
     class Meta:
         model = File
-        fields = ["id", "url", "name", "size", "created"]
-        read_only_fields = []
-        # TODO: check whether user field should be set to request.user
-        extra_kwargs = {}
+        fields = ["id", "url", "name", "size", "created", "file"]
+        extra_kwargs = {"file": {"write_only": True}}
