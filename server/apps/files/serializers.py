@@ -10,5 +10,5 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = ["id", "url", "name", "size", "created", "file"]
+        fields = ["id", "url", "name", "root_name", "size", "created", "file"]
         extra_kwargs = {"file": {"write_only": True}}

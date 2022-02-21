@@ -21,4 +21,11 @@ CACHES = {
 
 # django-extensions
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
+INSTALLED_APPS += [
+    "django_extensions",
+    "corsheaders",
+]  # noqa F405
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_URLS_REGEX = r"^/api/.*$"
