@@ -42,8 +42,16 @@ but in production - PostgreSQL.
 
 ## Checklist
 
-- [ ] Setup django/react
+- [x] Setup django/react
 
-- [ ] Work on design
+- [x] Work on design
 
-- [ ] File model
+- [x] File model
+
+- [x] Draggable setup
+
+- [x] File upload setup (Uppy)
+
+- [ ] Working upload area
+
+- [ ] Style app + upload

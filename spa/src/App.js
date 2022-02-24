@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 
 import Draggable from "react-draggable";
 import Uppy from "@uppy/core";
-import Tus from "@uppy/tus";
+import XHRUpload from "@uppy/xhr-upload"; // Classic ajax multipart/formdata file upload
+// import Tus from "@uppy/tus"; // Tus should be used in combination with Tus server
 import { useUppy, DragDrop } from "@uppy/react";
 
 import logo from "./assets/logo.svg";
@@ -14,10 +15,16 @@ const App = () => {
   // Uppy file uploader instance
   const uppy = useUppy(() => {
     return new Uppy({
-      restrictions: { maxNumberOfFiles: 1 },
       autoProceed: true,
-    }).use(Tus, {
-      endpoint: "https://tusd.tusdemo.net/files",
+      restrictions: {
+        maxNumberOfFiles: 1,
+        maxFileSize: 100 * 1024 * 1024, // 100 MiB
+      },
+    }).use(XHRUpload, {
+      endpoint: "http://localhost:8000/api/files/",
+      method: "post",
+      formData: true,
+      fieldName: "file",
     });
   });
 
@@ -44,13 +51,12 @@ const App = () => {
       Filehole <img src={logo} alt="logo" width={200} />
       <DragDrop
         uppy={uppy}
-        width="100%"
-        height="100%"
-        note="Images up to 200×200px"
+        width={500}
+        height={200}
+        note="Files up to 100MiB"
         locale={{
           strings: {
             // Text to show on the droppable area.
-            // `%{browse}` is replaced with a link that opens the system file selection dialog.
             dropHereOr: "Drop here or %{browse}",
             // Used as the label for the link that opens the system file selection dialog.
             browse: "browse",
