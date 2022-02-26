@@ -4,5 +4,5 @@
     "--profile=black",
     "--settings-path=${workspaceFolder}/server/setup.cfg"
   ],
-  "cSpell.words": ["Filehole"]
+  "cSpell.words": ["Filehole", "Swal"]
 }

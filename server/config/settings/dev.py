@@ -12,19 +12,19 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # CACHES
 # ------------------------------------------------------------------------------
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#         "LOCATION": "",
+#     }
+# }
 
 # django-extensions
 # ------------------------------------------------------------------------------
 INSTALLED_APPS += [
     "django_extensions",
     "corsheaders",
-]  # noqa F405
+]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]

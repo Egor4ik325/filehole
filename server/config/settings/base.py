@@ -6,7 +6,6 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# redirink/
 APPS_DIR = ROOT_DIR / "apps"
 env = environ.Env()
 
@@ -190,8 +189,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -215,9 +213,3 @@ LOGGING = {
 #     ),
 #     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 # }
-
-# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
-# CORS_URLS_REGEX = r"^/api/.*$"
-# CORS_ALLOW_ALL_ORIGINS = True
-# Your stuff...
-# ------------------------------------------------------------------------------

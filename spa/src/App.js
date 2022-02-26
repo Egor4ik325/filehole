@@ -6,8 +6,15 @@ import XHRUpload from "@uppy/xhr-upload"; // Classic ajax multipart/formdata fil
 // import Tus from "@uppy/tus"; // Tus should be used in combination with Tus server
 import { useUppy, DragDrop } from "@uppy/react";
 
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+
 import logo from "./assets/logo.svg";
 import { listFiles, uploadFile } from "./client";
+
+const checkIsImageUrl = (url) => {
+  return url.match(/\.(jpeg|jpg|gif|png|svg)$/) !== null;
+};
 
 const App = () => {
   const [files, setFiles] = useState(undefined);
@@ -29,6 +36,7 @@ const App = () => {
   });
 
   const fetchFiles = async () => {
+    setFiles(undefined); // clear files before fetching
     try {
       setFiles(await listFiles());
     } catch (error) {
@@ -40,20 +48,36 @@ const App = () => {
     fetchFiles();
   }, []);
 
-  const handleImageUploadChange = async (e) => {
-    const file = e.target.files[0];
-    await uploadFile(file);
+  uppy.on("upload-success", (file, response) => {
+    const uploadFile = JSON.parse(response.body);
+    setFiles([...files, uploadFile]);
+  });
+
+  const handleFileDelete = (id) => {
+    Swal.fire({
+      title: "Confirm delete",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    });
+
+    try {
+    } catch (error) {
+      // display error toast + console log
+    }
   };
 
   return (
     <div className="app">
-      <div className="header"></div>
-      Filehole <img src={logo} alt="logo" width={200} />
+      <div className="header">
+        Filehole <img src={logo} alt="logo" width={200} />
+      </div>
+
       <DragDrop
         uppy={uppy}
         width={500}
         height={200}
-        note="Files up to 100MiB"
+        note="Any files up to 100MiB"
         locale={{
           strings: {
             // Text to show on the droppable area.
@@ -62,27 +86,39 @@ const App = () => {
             browse: "browse",
           },
         }}
+        // onDrop={fetchFiles}
+        onDrop={() => fetchFiles()}
       />
       {files !== undefined &&
-        files.map((file) => (
-          <Draggable key={file.id}>
-            <div>
-              Name: {file.name}
-              <img src={file.url} alt="file" width="100" />
-              <a href={file.url} download={file.name}>
-                Download
-              </a>
-            </div>
-          </Draggable>
-        ))}
-      <form>
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUploadChange}
-        />
-      </form>
+        files.map((file) => {
+          if (checkIsImageUrl(file.url)) {
+            return (
+              <Draggable key={file.id}>
+                <div>
+                  <div>Name: {file.name}</div>
+                  <img src={file.url} alt="file" width="100" />
+                  <a href={file.url} download={file.name}>
+                    Download
+                  </a>
+                  <button onClick={() => handleFileDelete(file.id)}>
+                    Delete
+                  </button>
+                </div>
+              </Draggable>
+            );
+          }
+
+          return (
+            <Draggable key={file.id}>
+              <div>
+                <div>Name: {file.name}</div>
+                <a href={file.url} download={file.name}>
+                  Download
+                </a>
+              </div>
+            </Draggable>
+          );
+        })}
       <Draggable>
         <div>Hello, World!</div>
       </Draggable>
