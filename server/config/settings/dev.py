@@ -8,7 +8,8 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="c8Gzi5V1SmXruar4hRv0iZvuwF9n10369HnbyL8cSxb6OgbIa17WoqzB2BJjSCdM",
 )
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # CACHES
 # ------------------------------------------------------------------------------

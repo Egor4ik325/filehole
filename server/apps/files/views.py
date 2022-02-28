@@ -22,5 +22,5 @@ class FileViewSet(NotUpdatableViewSet):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        """Return queryset used in `list`, `retrive`, `update`, `destroy` and `purge` actions."""
-        return self.queryset
+        """Return re-evaluated queryset. Used in `list`, `retrieve`, `update`, `destroy` and `purge` actions."""
+        return self.queryset.all()
