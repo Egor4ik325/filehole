@@ -52,6 +52,18 @@ but in production - PostgreSQL.
 
 - [x] File upload setup (Uppy)
 
-- [ ] Working upload area
+- [x] Working upload area
 
-- [ ] Style app + upload
+- [x] Delete file modal (sweetalert2)
+
+- [x] Fix error
+
+- [x] Purge files functionality
+
+- [ ] Style background
+
+- [ ] Style header
+
+- [ ] Style files
+
+- [ ] Style upload

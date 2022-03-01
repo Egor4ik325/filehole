@@ -12,7 +12,7 @@ import "sweetalert2/src/sweetalert2.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 import logo from "./assets/logo.svg";
-import { listFiles, deleteFile } from "./client";
+import { listFiles, deleteFile, purgeFiles } from "./client";
 
 const checkIsImageUrl = (url) => {
   return url.match(/\.(jpeg|jpg|gif|png|svg)$/) !== null;
@@ -66,9 +66,32 @@ const App = () => {
       try {
         await deleteFile(id);
         setFiles(files.filter((file) => file.id !== id));
+        toast.success("File was deleted!");
       } catch (error) {
         console.error(error);
         toast.error("Error while deleting file!");
+      }
+    }
+  };
+
+  const handleClearFiles = async () => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Confirm purge",
+      text: "Are you sure you want to delete ALL files?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete all",
+      cancelButtonText: "No, STOP",
+    });
+
+    if (isConfirmed) {
+      try {
+        await purgeFiles();
+        setFiles(undefined);
+        toast.success("Deleted all files");
+      } catch (error) {
+        console.log(error);
+        toast.error("Not able to delete all files!");
       }
     }
   };
@@ -140,6 +163,7 @@ const App = () => {
         <Draggable>
           <div>Hello, World!</div>
         </Draggable>
+        <button onClick={handleClearFiles}>Clear all</button>
       </div>
     </>
   );

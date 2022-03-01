@@ -27,3 +27,7 @@ export const uploadFile = async (file) => {
 export const deleteFile = async (id) => {
   await axios.delete(`${API_BASE_URL}files/${id}/`);
 };
+
+export const purgeFiles = async () => {
+  await axios.delete(`${API_BASE_URL}files/`);
+};
