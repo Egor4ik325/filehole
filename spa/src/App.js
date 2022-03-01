@@ -11,7 +11,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 import "react-toastify/dist/ReactToastify.css";
 
-import logo from "./assets/logo.svg";
+import logo from "./assets/logo.png";
 import { listFiles, deleteFile, purgeFiles } from "./client";
 
 const checkIsImageUrl = (url) => {
@@ -111,59 +111,76 @@ const App = () => {
       />
       <div className="app">
         <div className="header">
-          Filehole <img src={logo} alt="logo" width={200} />
+          <div className="header__brand">
+            <img className="header__brand__logo" src={logo} alt="logo" />
+            <div className="header__brand__text">Filehole</div>
+          </div>
+          <div>
+            <div className="header__copyright">© 2022 Egor Zorin.</div>
+            <div className="header__social-icons"></div>
+          </div>
         </div>
+        <div className="main">
+          <DragDrop
+            uppy={uppy}
+            width={500}
+            height={200}
+            note="Any files up to 100MiB"
+            locale={{
+              strings: {
+                // Text to show on the droppable area.
+                dropHereOr: "Drop here or %{browse}",
+                // Used as the label for the link that opens the system file selection dialog.
+                browse: "browse",
+              },
+            }}
+            // onDrop={fetchFiles}
+            onDrop={() => fetchFiles()}
+          />
+          {files !== undefined &&
+            files.map((file) => {
+              if (checkIsImageUrl(file.url)) {
+                return (
+                  <Draggable bounds="parent" key={file.id}>
+                    <div className="file">
+                      <div className="file__meta">Name: {file.name}</div>
+                      <img
+                        className="file__image"
+                        src={file.url}
+                        alt="file"
+                        width="100"
+                      />
+                      <a
+                        className="file__download"
+                        href={file.url}
+                        download={file.name}
+                      >
+                        Download
+                      </a>
+                      <button
+                        className="file__delete"
+                        onClick={() => handleFileDelete(file.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </Draggable>
+                );
+              }
 
-        <DragDrop
-          uppy={uppy}
-          width={500}
-          height={200}
-          note="Any files up to 100MiB"
-          locale={{
-            strings: {
-              // Text to show on the droppable area.
-              dropHereOr: "Drop here or %{browse}",
-              // Used as the label for the link that opens the system file selection dialog.
-              browse: "browse",
-            },
-          }}
-          // onDrop={fetchFiles}
-          onDrop={() => fetchFiles()}
-        />
-        {files !== undefined &&
-          files.map((file) => {
-            if (checkIsImageUrl(file.url)) {
               return (
                 <Draggable key={file.id}>
                   <div>
                     <div>Name: {file.name}</div>
-                    <img src={file.url} alt="file" width="100" />
                     <a href={file.url} download={file.name}>
                       Download
                     </a>
-                    <button onClick={() => handleFileDelete(file.id)}>
-                      Delete
-                    </button>
                   </div>
                 </Draggable>
               );
-            }
-
-            return (
-              <Draggable key={file.id}>
-                <div>
-                  <div>Name: {file.name}</div>
-                  <a href={file.url} download={file.name}>
-                    Download
-                  </a>
-                </div>
-              </Draggable>
-            );
-          })}
-        <Draggable>
-          <div>Hello, World!</div>
-        </Draggable>
-        <button onClick={handleClearFiles}>Clear all</button>
+            })}
+          <button onClick={handleClearFiles}>Clear all</button>
+        </div>
       </div>
     </>
   );
