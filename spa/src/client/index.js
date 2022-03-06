@@ -7,6 +7,7 @@ class File {
     this.id = data.id;
     this.name = data.root_name;
     this.url = data.url;
+    this.size = data.size;
   }
 }
 

@@ -6,6 +6,12 @@ import XHRUpload from "@uppy/xhr-upload"; // Classic ajax multipart/formdata fil
 // import Tus from "@uppy/tus"; // Tus should be used in combination with Tus server
 import { useUppy, DragDrop } from "@uppy/react";
 import { toast, ToastContainer } from "react-toastify";
+import {
+  faDownload,
+  faTrash,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
@@ -18,7 +24,41 @@ const checkIsImageUrl = (url) => {
   return url.match(/\.(jpeg|jpg|gif|png|svg)$/) !== null;
 };
 
-const App = () => {
+/**
+ * Format bytes as human-readable text.
+ *
+ * @param bytes Number of bytes.
+ * @param si True to use metric (SI) units, aka powers of 1000. False to use
+ *           binary (IEC), aka powers of 1024.
+ * @param dp Number of decimal places to display.
+ *
+ * @return Formatted string.
+ */
+function getHumanizedFileSize(bytes, si = false, dp = 1) {
+  const thresh = si ? 1000 : 1024;
+
+  if (Math.abs(bytes) < thresh) {
+    return bytes + " B";
+  }
+
+  const units = si
+    ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+    : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+  let u = -1;
+  const r = 10 ** dp;
+
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (
+    Math.round(Math.abs(bytes) * r) / r >= thresh &&
+    u < units.length - 1
+  );
+
+  return bytes.toFixed(dp) + " " + units[u];
+}
+
+export default function App() {
   const [files, setFiles] = useState(undefined);
 
   // Uppy file uploader instance
@@ -122,8 +162,9 @@ const App = () => {
         </div>
         <div className="main">
           <DragDrop
+            className="main__dragdrop"
             uppy={uppy}
-            width={500}
+            width={350}
             height={200}
             note="Any files up to 100MiB"
             locale={{
@@ -141,30 +182,10 @@ const App = () => {
             files.map((file) => {
               if (checkIsImageUrl(file.url)) {
                 return (
-                  <Draggable bounds="parent" key={file.id}>
-                    <div className="file">
-                      <div className="file__meta">Name: {file.name}</div>
-                      <img
-                        className="file__image"
-                        src={file.url}
-                        alt="file"
-                        width="100"
-                      />
-                      <a
-                        className="file__download"
-                        href={file.url}
-                        download={file.name}
-                      >
-                        Download
-                      </a>
-                      <button
-                        className="file__delete"
-                        onClick={() => handleFileDelete(file.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </Draggable>
+                  <File
+                    file={file}
+                    onDelete={() => handleFileDelete(file.id)}
+                  />
                 );
               }
 
@@ -179,11 +200,44 @@ const App = () => {
                 </Draggable>
               );
             })}
-          <button onClick={handleClearFiles}>Clear all</button>
+          <FontAwesomeIcon
+            className="clear-all icon--hover-darken"
+            icon={faTrashCan}
+            onClick={handleClearFiles}
+          />
         </div>
       </div>
     </>
   );
-};
+}
 
-export default App;
+function File({ file, onDelete }) {
+  return (
+    <Draggable bounds="parent" key={file.id}>
+      <div className="file">
+        <div className="file__controls">
+          <a
+            className="file__controls__download"
+            href={file.url}
+            download={file.name}
+          >
+            <FontAwesomeIcon className="icon--hover-darken" icon={faDownload} />
+          </a>
+          <FontAwesomeIcon
+            className="file__controls__delete icon--hover-darken"
+            icon={faTrash}
+            role="button"
+            onClick={() => onDelete()}
+          />
+        </div>
+        <img className="file__image" src={file.url} alt="file" width="100" />
+        <div className="file__meta">
+          <div className="file__meta__name">{file.name}</div>
+          <div className="file__meta__size">
+            {getHumanizedFileSize(file.size)}
+          </div>
+        </div>
+      </div>
+    </Draggable>
+  );
+}
