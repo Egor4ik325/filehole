@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Draggable from "react-draggable";
 import Uppy from "@uppy/core";
@@ -56,6 +56,13 @@ function getHumanizedFileSize(bytes, si = false, dp = 1) {
   );
 
   return bytes.toFixed(dp) + " " + units[u];
+}
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ */
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
 export default function App() {
@@ -212,8 +219,40 @@ export default function App() {
 }
 
 function File({ file, onDelete }) {
+  // [-645; 645] = 1290 = window.innerWidth - 130
+  const width = window.innerWidth - 130;
+  const height = window.innerHeight - 200 - 80;
+  const defaultPosition = useRef({
+    x: getRandom(-width / 2, width / 2),
+    y: getRandom(-height / 2 + 80, height / 2),
+  });
+
+  // const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleWindowResize = () => {};
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
+  const handleDragStop = (e) => {
+    // setPosition({ x: e.x, y: e.y });
+    console.log(e);
+  };
+
   return (
-    <Draggable bounds="parent" key={file.id}>
+    <Draggable
+      bounds="parent"
+      key={file.id}
+      // defaultPosition={defaultPosition.current}
+      // position={position}
+      positionOffset={{ x: 0, y: 0 }}
+      onStop={handleDragStop}
+    >
       <div className="file">
         <div className="file__controls">
           <a
@@ -230,7 +269,7 @@ function File({ file, onDelete }) {
             onClick={() => onDelete()}
           />
         </div>
-        <img className="file__image" src={file.url} alt="file" width="100" />
+        <img className="file__image" src={file.url} alt="file" />
         <div className="file__meta">
           <div className="file__meta__name">{file.name}</div>
           <div className="file__meta__size">
