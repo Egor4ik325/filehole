@@ -221,15 +221,35 @@ export default function App() {
 function File({ file, onDelete }) {
   // [-645; 645] = 1290 = window.innerWidth - 130
   const width = window.innerWidth - 130;
-  const height = window.innerHeight - 200 - 80;
-  const defaultPosition = useRef({
-    x: getRandom(-width / 2, width / 2),
-    y: getRandom(-height / 2 + 80, height / 2),
+  const height = window.innerHeight - 200;
+
+  const [position, setPosition] = useState({
+    x: getRandom(0, width),
+    y: getRandom(0, height),
   });
 
-  // const [position, setPosition] = useState({ x: 0, y: 0 });
+  const handleWindowResize = () => {
+    // State updater function (state is not updated in event listeners)
+    setPosition((position) => {
+      let x = position.x;
+      let y = position.y;
 
-  const handleWindowResize = () => {};
+      if (x + 130 > window.innerWidth) {
+        x = window.innerWidth - 130;
+      }
+      if (x < 0) {
+        x = 0;
+      }
+      if (y + 200 + 40 > window.innerHeight) {
+        y = window.innerHeight - 200 - 40;
+      }
+      if (y < 40) {
+        y = 40;
+      }
+
+      return { x, y };
+    });
+  };
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowResize);
@@ -239,18 +259,17 @@ function File({ file, onDelete }) {
     };
   }, []);
 
-  const handleDragStop = (e) => {
-    // setPosition({ x: e.x, y: e.y });
-    console.log(e);
+  const handleDragStop = (e, data) => {
+    // Convert from center coordinated
+    setPosition({ x: data.x + width / 2, y: data.y + height / 2 });
   };
 
   return (
     <Draggable
       bounds="parent"
       key={file.id}
-      // defaultPosition={defaultPosition.current}
-      // position={position}
-      positionOffset={{ x: 0, y: 0 }}
+      // Convert to center coordinated
+      position={{ x: position.x - width / 2, y: position.y - height / 2 }}
       onStop={handleDragStop}
     >
       <div className="file">

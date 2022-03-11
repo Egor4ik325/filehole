@@ -116,6 +116,7 @@ body {
   word-break: break-all;
   padding: 0 5px;
   margin-bottom: 5px;
+  overflow: hidden;
 }
 
 .file__meta__size {
@@ -123,6 +124,7 @@ body {
   font-size: 0.8rem;
   text-align: end;
   padding-right: 5px;
+  overflow: hidden;
 }
 
 .main__dragdrop {
